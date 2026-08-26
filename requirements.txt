@@ -1,0 +1,10 @@
+numpy
+pandas
+scikit-learn
+PyMuPDF
+python-docx
+spacy
+nltk
+streamlit
+plotly
+python-dotenv

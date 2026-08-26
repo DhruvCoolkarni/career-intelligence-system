@@ -1,0 +1,1 @@
+print("Career Intelligence System started!")
