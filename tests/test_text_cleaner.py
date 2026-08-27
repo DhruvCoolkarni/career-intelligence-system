@@ -1,4 +1,4 @@
-from utils.text_cleaner import clean_text
+from app.utils.text_cleaner import clean_text
 
 
 sample_text = "Python\n\n   Machine   Learning   SQL"

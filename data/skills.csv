@@ -1,0 +1,16 @@
+skill,category
+Python,Programming
+Java,Programming
+C++,Programming
+SQL,Database
+Pandas,Data Science
+NumPy,Data Science
+Scikit-learn,Machine Learning
+TensorFlow,Deep Learning
+PyTorch,Deep Learning
+Machine Learning,AI
+Deep Learning,AI
+Computer Vision,AI
+NLP,AI
+Git,Tools
+Docker,Tools
