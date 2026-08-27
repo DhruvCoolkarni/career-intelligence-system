@@ -1,0 +1,6 @@
+job,required_skills
+Machine Learning Engineer,"Python,Scikit-learn,SQL,Machine Learning,Docker,Git"
+Data Scientist,"Python,Pandas,NumPy,SQL,Scikit-learn,Machine Learning,Statistics"
+Data Analyst,"Python,SQL,Pandas,Excel,Statistics,Data Visualization"
+Computer Vision Engineer,"Python,OpenCV,PyTorch,TensorFlow,Computer Vision,Deep Learning"
+NLP Engineer,"Python,NLTK,spaCy,PyTorch,TensorFlow,NLP,Deep Learning"
