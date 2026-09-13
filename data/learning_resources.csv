@@ -1,0 +1,32 @@
+skill,level,learning_path,project_idea
+python,Beginner,Python fundamentals → functions → data structures → file handling,Build a resume analyzer
+database,Beginner,SQL basics → queries → joins → database design,Build a career database
+git,Beginner,Git basics → branches → GitHub → collaboration,Create and maintain a GitHub project
+docker,Intermediate,Docker basics → images → containers → Docker Compose,Containerize a Python application
+pandas,Beginner,DataFrames → data cleaning → filtering → grouping,Build a data analysis project
+numpy,Beginner,Arrays → indexing → mathematical operations → data processing,Build a numerical data processing project
+scikit-learn,Intermediate,Preprocessing → models → training → evaluation,Build a machine learning prediction system
+machine learning,Intermediate,Supervised learning → preprocessing → evaluation → model improvement,Build an end-to-end ML project
+pytorch,Intermediate,Tensors → datasets → neural networks → training,Build an image classification project
+tensorflow,Intermediate,Tensors → neural networks → training → evaluation,Build a deep learning project
+business intelligence,Beginner,Data visualization → dashboards → business analysis,Build a business intelligence dashboard
+development environment,Beginner,IDE basics → debugging → extensions → development workflow,Build and debug a Python application
+operating system software,Beginner,Linux fundamentals → processes → filesystems → permissions,Build a Linux system monitoring tool
+data mining software,Intermediate,Data preprocessing → exploration → pattern discovery → evaluation,Build a data mining pipeline
+project management software,Beginner,Project planning → task tracking → milestones → collaboration,Build a project management dashboard
+analytical or scientific software,Intermediate,Data analysis → statistical methods → visualization → interpretation,Build a scientific data analysis system
+presentation software,Beginner,Presentation design → visual storytelling → data presentation,Create a technical project presentation
+spreadsheet software,Beginner,Formulas → data cleaning → pivot tables → charts,Build an automated analytics spreadsheet
+office suite software,Beginner,Documents → spreadsheets → presentations → productivity workflows,Build a professional project documentation system
+network monitoring software,Intermediate,Networking basics → monitoring → logs → alerts,Build a network monitoring dashboard
+network security and virtual private network vpn equipmentsoftware,Intermediate,Networking → VPNs → firewalls → secure communication,Build a secure network monitoring lab
+enterprise application integration software,Intermediate,APIs → system integration → authentication → data exchange,Build an API integration platform
+content workflow software,Beginner,Content workflows → versioning → collaboration → publishing,Build a content workflow system
+document management software,Beginner,Document storage → indexing → search → access control,Build a document management system
+portal server software,Intermediate,Web servers → authentication → user management → deployment,Build a simple employee portal
+cloud-based management software,Intermediate,Cloud fundamentals → services → monitoring → access management,Build a cloud resource management dashboard
+platform interconnectivity software,Intermediate,APIs → networking → integration patterns → data exchange,Build a service integration platform
+enterprise resource planning erp software,Intermediate,Business processes → ERP concepts → databases → reporting,Build a basic ERP prototype
+customer relationship management crm software,Beginner,CRM concepts → customer data → sales workflows → reporting,Build a CRM dashboard
+configuration management software,Intermediate,Configuration concepts → automation → version control → deployment,Build an automated configuration manager
+compliance software,Intermediate,Compliance concepts → policies → monitoring → reporting,Build a compliance tracking dashboard

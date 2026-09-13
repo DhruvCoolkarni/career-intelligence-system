@@ -7,6 +7,7 @@ from utils.skill_gap import calculate_skill_gap
 from utils.job_matcher import get_required_skills
 from utils.skill_normalizer import normalize_skill
 from utils.skill_priority import calculate_skill_priorities
+from utils.learning_recommender import get_learning_recommendations
 from utils.career_scores import (
     calculate_technical_score,
     calculate_core_skill_score,
@@ -97,6 +98,11 @@ if uploaded_resume:
                 missing_skills,
                 software_data,
                 essential_data
+            )
+
+
+            recommendations = get_learning_recommendations(
+                missing_skills
             )
 
 
@@ -196,7 +202,8 @@ if uploaded_resume:
 
                     st.caption(
                         f"Type: {item['type']} | "
-                        f"Priority Score: {item['priority_score']}"
+                        f"Priority Score: "
+                        f"{item['priority_score']}"
                     )
 
                     if item["type"] == "Core Skill":
@@ -232,7 +239,8 @@ if uploaded_resume:
 
                     st.caption(
                         f"Type: {item['type']} | "
-                        f"Priority Score: {item['priority_score']}"
+                        f"Priority Score: "
+                        f"{item['priority_score']}"
                     )
 
 
@@ -253,8 +261,114 @@ if uploaded_resume:
 
                     st.caption(
                         f"Type: {item['type']} | "
-                        f"Priority Score: {item['priority_score']}"
+                        f"Priority Score: "
+                        f"{item['priority_score']}"
                     )
+
+
+            st.subheader("Personalized Learning Recommendations")
+
+            st.caption(
+                "Actionable learning paths for your missing skills, "
+                "ordered by learning priority."
+            )
+
+
+            priority_lookup = {
+                item["skill"]: item
+                for item in priorities
+            }
+
+
+            actionable_recommendations = [
+                recommendation
+                for recommendation in recommendations
+                if recommendation["level"] != "Not available"
+            ]
+
+
+            actionable_recommendations.sort(
+                key=lambda recommendation: priority_lookup.get(
+                    recommendation["skill"],
+                    {}
+                ).get("priority_score", 0),
+                reverse=True
+            )
+
+
+            for recommendation in actionable_recommendations:
+
+                skill = recommendation["skill"]
+
+                priority_data = priority_lookup.get(
+                    skill,
+                    {}
+                )
+
+                priority = priority_data.get(
+                    "priority",
+                    "N/A"
+                )
+
+                priority_score = priority_data.get(
+                    "priority_score",
+                    "N/A"
+                )
+
+
+                if priority == "High":
+
+                    priority_label = "🔴 High Priority"
+
+                elif priority == "Medium":
+
+                    priority_label = "🟠 Medium Priority"
+
+                elif priority == "Low":
+
+                    priority_label = "🟢 Low Priority"
+
+                else:
+
+                    priority_label = "⚪ Priority unavailable"
+
+
+                st.markdown(
+                    f"### {priority_label}"
+                )
+
+                st.markdown(
+                    f"**{skill}**"
+                )
+
+                st.caption(
+                    f"Priority Score: {priority_score}"
+                )
+
+                st.write(
+                    f"**Level:** {recommendation['level']}"
+                )
+
+                st.write(
+                    f"**Learning Path:** "
+                    f"{recommendation['learning_path']}"
+                )
+
+                st.write(
+                    f"**Project Idea:** "
+                    f"{recommendation['project_idea']}"
+                )
+
+                st.divider()
+
+
+            if not actionable_recommendations:
+
+                st.info(
+                    "No personalized learning recommendations "
+                    "are currently available for your missing skills."
+                )
+            
 
 
         else:
