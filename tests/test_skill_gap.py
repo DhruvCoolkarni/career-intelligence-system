@@ -3,18 +3,16 @@ from app.utils.skill_gap import calculate_skill_gap
 
 user_skills = [
     "Python",
-    "SQL",
-    "Git",
+    "MySQL",
+    "GitHub",
     "Docker"
 ]
 
 required_skills = [
     "Python",
-    "Scikit-learn",
-    "SQL",
-    "Machine Learning",
-    "Docker",
-    "Git"
+    "Data base management system software",
+    "Git",
+    "Docker"
 ]
 
 matched_skills, missing_skills = calculate_skill_gap(
