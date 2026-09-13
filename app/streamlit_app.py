@@ -6,6 +6,7 @@ from utils.skill_extractor import extract_skills
 from utils.skill_gap import calculate_skill_gap
 from utils.job_matcher import get_required_skills
 from utils.skill_normalizer import normalize_skill
+from utils.skill_priority import calculate_skill_priorities
 from utils.career_scores import (
     calculate_technical_score,
     calculate_core_skill_score,
@@ -35,6 +36,7 @@ uploaded_resume = st.file_uploader(
 
 
 if uploaded_resume:
+
     st.success("Resume uploaded successfully!")
 
     resume_text = extract_text_from_pdf(uploaded_resume)
@@ -50,6 +52,7 @@ if uploaded_resume:
 
 
     if target_job:
+
         required_skills = get_required_skills(target_job)
 
         if required_skills:
@@ -90,7 +93,19 @@ if uploaded_resume:
             )
 
 
+            priorities = calculate_skill_priorities(
+                missing_skills,
+                software_data,
+                essential_data
+            )
+
+
             st.subheader("Career Readiness")
+
+            st.caption(
+                "Shows how closely your current skills match "
+                "the skills expected for the selected career."
+            )
 
 
             col1, col2, col3, col4 = st.columns(4)
@@ -117,7 +132,20 @@ if uploaded_resume:
             )
 
 
+            st.caption(
+                "Technical Skills = match with job-related technologies. "
+                "Core Skills = match with important workplace skills. "
+                "Market Relevance = match with technologies marked "
+                "In Demand or Hot Technology in O*NET."
+            )
+
+
             st.subheader("Skill Gap Analysis")
+
+            st.caption(
+                "Shows which required skills you already have "
+                "and which skills are missing from your resume."
+            )
 
 
             st.write("Matched Skills:")
@@ -128,21 +156,139 @@ if uploaded_resume:
             st.write(missing_skills)
 
 
+            st.subheader("Learning Priorities")
+
+            st.caption(
+                "Missing skills ranked by their importance "
+                "and market relevance."
+            )
+
+
+            high_priority = [
+                item for item in priorities
+                if item["priority"] == "High"
+            ]
+
+            medium_priority = [
+                item for item in priorities
+                if item["priority"] == "Medium"
+            ]
+
+            low_priority = [
+                item for item in priorities
+                if item["priority"] == "Low"
+            ]
+
+
+            if high_priority:
+
+                st.markdown("### 🔴 High Priority")
+
+                st.caption(
+                    "Skills that should receive attention first."
+                )
+
+                for item in high_priority:
+
+                    st.write(
+                        f"**{item['skill']}**"
+                    )
+
+                    st.caption(
+                        f"Type: {item['type']} | "
+                        f"Priority Score: {item['priority_score']}"
+                    )
+
+                    if item["type"] == "Core Skill":
+
+                        st.caption(
+                            f"O*NET Importance: "
+                            f"{item['importance']}"
+                        )
+
+                    elif item["type"] == "Technical Skill":
+
+                        st.caption(
+                            f"In Demand: {item['in_demand']} | "
+                            f"Hot Technology: "
+                            f"{item['hot_technology']}"
+                        )
+
+
+            if medium_priority:
+
+                st.markdown("### 🟠 Medium Priority")
+
+                st.caption(
+                    "Useful skills to learn after "
+                    "the high-priority gaps."
+                )
+
+                for item in medium_priority:
+
+                    st.write(
+                        f"**{item['skill']}**"
+                    )
+
+                    st.caption(
+                        f"Type: {item['type']} | "
+                        f"Priority Score: {item['priority_score']}"
+                    )
+
+
+            if low_priority:
+
+                st.markdown("### 🟢 Low Priority")
+
+                st.caption(
+                    "Lower-priority gaps that can "
+                    "be addressed later."
+                )
+
+                for item in low_priority:
+
+                    st.write(
+                        f"**{item['skill']}**"
+                    )
+
+                    st.caption(
+                        f"Type: {item['type']} | "
+                        f"Priority Score: {item['priority_score']}"
+                    )
+
+
         else:
+
             st.warning(
                 "Target job not found in our job database."
             )
 
 
     st.subheader("Detected Skills")
+
+    st.caption(
+        "Skills identified from the text extracted "
+        "from your resume."
+    )
+
     st.write(detected_skills)
 
 
     st.subheader("Normalized Skills")
+
+    st.caption(
+        "Skills converted into standardized names so "
+        "different terms can be matched consistently."
+    )
+
     st.write(normalized_skills)
 
 
     st.subheader("Extracted Resume Text")
+
+    st.caption(
+        "The text extracted from your uploaded PDF resume."
+    )
 
     st.text_area(
         "Resume content",
