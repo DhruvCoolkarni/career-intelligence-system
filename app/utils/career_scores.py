@@ -147,3 +147,18 @@ def calculate_knowledge_score(knowledge_scores):
     ) * 100
 
     return round(score, 2)
+
+def calculate_career_readiness(
+    technical_score,
+    core_skill_score,
+    knowledge_score,
+    market_relevance_score
+):
+    score = (
+        technical_score * 0.40
+        + core_skill_score * 0.20
+        + knowledge_score * 0.25
+        + market_relevance_score * 0.15
+    )
+
+    return round(score, 2)
