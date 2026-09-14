@@ -1,21 +1,30 @@
-from .skill_normalizer import normalize_skill
+from .skill_matcher import skills_match
 
 
 def calculate_skill_gap(user_skills, required_skills):
-    normalized_user_skills = [
-        normalize_skill(skill)
-        for skill in user_skills
-    ]
 
     matched_skills = []
     missing_skills = []
 
-    for skill in required_skills:
-        normalized_required_skill = normalize_skill(skill)
+    for required_skill in required_skills:
 
-        if normalized_required_skill in normalized_user_skills:
-            matched_skills.append(skill)
+        is_match = False
+
+        for user_skill in user_skills:
+
+            if skills_match(
+                user_skill,
+                required_skill
+            ):
+                is_match = True
+                break
+
+        if is_match:
+
+            matched_skills.append(required_skill)
+
         else:
-            missing_skills.append(skill)
+
+            missing_skills.append(required_skill)
 
     return matched_skills, missing_skills

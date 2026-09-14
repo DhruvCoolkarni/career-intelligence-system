@@ -1,62 +1,49 @@
-from app.utils.career_scores import (
-    calculate_technical_score,
-    calculate_core_skill_score,
-    calculate_market_relevance_score,
-    calculate_career_readiness
-)
-
-from app.utils.onet_loader import (
-    get_software_skills_for_job,
-    get_essential_skills_for_job
-)
+from app.utils.career_scores import calculate_technical_score
+from app.utils.job_matcher import get_required_skill_data
 
 
 target_job = "Computer and Information Systems Managers"
 
+
 user_skills = [
     "Python",
     "Java",
+    "C++",
+    "Pandas",
+    "NumPy",
+    "Scikit-learn",
+    "Machine Learning",
     "SQL",
     "MySQL",
+    "PostgreSQL",
     "Git",
     "GitHub",
     "Docker",
-    "Machine Learning",
-    "Critical Thinking",
-    "Reading Comprehension",
-    "Active Learning"
+    "Linux",
+    "Business Intelligence",
+    "Data Visualization",
+    "REST APIs"
 ]
 
 
-software_data = get_software_skills_for_job(target_job)
-essential_data = get_essential_skills_for_job(target_job)
-
-required_skills = software_data["Element Name"].dropna().unique().tolist()
+required_skill_data = get_required_skill_data(
+    target_job
+)
 
 
 technical_score = calculate_technical_score(
     user_skills,
-    required_skills
-)
-
-core_skill_score = calculate_core_skill_score(
-    user_skills,
-    essential_data
-)
-
-market_score = calculate_market_relevance_score(
-    software_data,
-    user_skills
-)
-
-career_score = calculate_career_readiness(
-    technical_score,
-    core_skill_score,
-    market_score
+    required_skill_data
 )
 
 
-print("Technical Skill Score:", technical_score)
-print("Core Skill Score:", core_skill_score)
-print("Market Relevance Score:", market_score)
-print("Overall Career Readiness:", career_score)
+print("\n===== WEIGHTED TECHNICAL SCORE =====\n")
+
+print("Target Job:")
+print(target_job)
+
+print("\nTotal Requirements:")
+print(len(required_skill_data))
+
+print("\nWeighted Technical Score:")
+print(f"{technical_score}%")

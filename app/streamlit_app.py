@@ -1,4 +1,5 @@
 import streamlit as st
+import plotly.graph_objects as go
 
 from utils.pdf_reader import extract_text_from_pdf
 from utils.text_cleaner import clean_text
@@ -8,6 +9,7 @@ from utils.job_matcher import get_required_skills
 from utils.skill_normalizer import normalize_skill
 from utils.skill_priority import calculate_skill_priorities
 from utils.learning_recommender import get_learning_recommendations
+from utils.roadmap_builder import build_learning_roadmap
 from utils.career_scores import (
     calculate_technical_score,
     calculate_core_skill_score,
@@ -106,6 +108,16 @@ if uploaded_resume:
             )
 
 
+            roadmap = build_learning_roadmap(
+                recommendations,
+                priorities
+            )
+
+
+            # ------------------------------------------------
+            # CAREER READINESS
+            # ------------------------------------------------
+
             st.subheader("Career Readiness")
 
             st.caption(
@@ -144,7 +156,56 @@ if uploaded_resume:
                 "Market Relevance = match with technologies marked "
                 "In Demand or Hot Technology in O*NET."
             )
+            st.subheader("Readiness Breakdown")
 
+            st.caption(
+                "Visual comparison of your overall readiness "
+                "and the three factors used to calculate it."
+            )
+
+
+            readiness_data = {
+                "Overall Readiness": career_score,
+                "Technical Skills": technical_score,
+                "Core Skills": core_skill_score,
+                "Market Relevance": market_score
+            }
+
+
+            fig = go.Figure(
+                data=[
+                    go.Bar(
+                        x=list(readiness_data.keys()),
+                        y=list(readiness_data.values()),
+                        text=[
+                            f"{score}%"
+                            for score in readiness_data.values()
+                        ],
+                        textposition="auto"
+                    )
+                ]
+            )
+
+
+            fig.update_layout(
+                yaxis_title="Score (%)",
+                yaxis=dict(
+                    range=[0, 100]
+                ),
+                xaxis_title="Career Analysis",
+                height=450
+            )
+
+
+            st.plotly_chart(
+                fig,
+                use_container_width=True
+            )
+
+
+            # ------------------------------------------------
+            # SKILL GAP
+            # ------------------------------------------------
 
             st.subheader("Skill Gap Analysis")
 
@@ -156,11 +217,49 @@ if uploaded_resume:
 
             st.write("Matched Skills:")
             st.write(matched_skills)
+            st.subheader("Skill Gap Overview")
 
+            st.caption(
+                "Comparison between the skills you already have "
+                "and the skills missing for your target career."
+            )
+
+
+            skill_gap_data = {
+                "Matched Skills": len(matched_skills),
+                "Missing Skills": len(missing_skills)
+            }
+
+
+            skill_gap_fig = go.Figure(
+                data=[
+                    go.Pie(
+                        labels=list(skill_gap_data.keys()),
+                        values=list(skill_gap_data.values()),
+                        hole=0.45,
+                        textinfo="label+percent"
+                    )
+                ]
+            )
+
+
+            skill_gap_fig.update_layout(
+                height=400
+            )
+
+
+            st.plotly_chart(
+                skill_gap_fig,
+                use_container_width=True
+            )
 
             st.write("Missing Skills:")
             st.write(missing_skills)
 
+
+            # ------------------------------------------------
+            # LEARNING PRIORITIES
+            # ------------------------------------------------
 
             st.subheader("Learning Priorities")
 
@@ -266,7 +365,94 @@ if uploaded_resume:
                     )
 
 
-            st.subheader("Personalized Learning Recommendations")
+            # ------------------------------------------------
+            # CAREER LEARNING ROADMAP
+            # ------------------------------------------------
+
+            st.subheader("Career Learning Roadmap")
+
+            st.caption(
+                "A step-by-step learning sequence created from "
+                "your missing skills, learning levels, and priorities."
+            )
+
+
+            phase_icons = {
+                "Phase 1 — Foundations": "🟢",
+                "Phase 2 — Intermediate Skills": "🟠",
+                "Phase 3 — Advanced Skills": "🔴"
+            }
+
+
+            for phase, skills in roadmap.items():
+
+                icon = phase_icons.get(
+                    phase,
+                    "📚"
+                )
+
+                st.markdown(
+                    f"### {icon} {phase}"
+                )
+
+
+                if not skills:
+
+                    st.info(
+                        "No learning items available for this phase."
+                    )
+
+                    continue
+
+
+                for item in skills:
+
+                    priority = item["priority"]
+
+
+                    if priority == "High":
+
+                        priority_label = "🔴 High"
+
+                    elif priority == "Medium":
+
+                        priority_label = "🟠 Medium"
+
+                    else:
+
+                        priority_label = "🟢 Low"
+
+
+                    st.markdown(
+                        f"**{item['skill']}** — "
+                        f"{priority_label}"
+                    )
+
+                    st.caption(
+                        f"Priority Score: "
+                        f"{item['priority_score']}"
+                    )
+
+                    st.write(
+                        f"**Learning Path:** "
+                        f"{item['learning_path']}"
+                    )
+
+                    st.write(
+                        f"**Project:** "
+                        f"{item['project_idea']}"
+                    )
+
+                    st.divider()
+
+
+            # ------------------------------------------------
+            # PERSONALIZED LEARNING RECOMMENDATIONS
+            # ------------------------------------------------
+
+            st.subheader(
+                "Personalized Learning Recommendations"
+            )
 
             st.caption(
                 "Actionable learning paths for your missing skills, "
@@ -368,7 +554,6 @@ if uploaded_resume:
                     "No personalized learning recommendations "
                     "are currently available for your missing skills."
                 )
-            
 
 
         else:
@@ -377,6 +562,10 @@ if uploaded_resume:
                 "Target job not found in our job database."
             )
 
+
+    # ------------------------------------------------
+    # DETECTED SKILLS
+    # ------------------------------------------------
 
     st.subheader("Detected Skills")
 
@@ -388,6 +577,10 @@ if uploaded_resume:
     st.write(detected_skills)
 
 
+    # ------------------------------------------------
+    # NORMALIZED SKILLS
+    # ------------------------------------------------
+
     st.subheader("Normalized Skills")
 
     st.caption(
@@ -397,6 +590,10 @@ if uploaded_resume:
 
     st.write(normalized_skills)
 
+
+    # ------------------------------------------------
+    # EXTRACTED TEXT
+    # ------------------------------------------------
 
     st.subheader("Extracted Resume Text")
 
