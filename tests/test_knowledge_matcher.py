@@ -5,7 +5,7 @@ from app.utils.knowledge_matcher import (
 )
 
 
-target_job = "Computer and Information Systems Managers"
+target_job = "Computer and Information Research Scientists"
 
 
 knowledge_data = pd.read_csv(
@@ -19,20 +19,18 @@ knowledge_data = knowledge_data[
 ]
 
 
-user_skills = [
-    "Python",
-    "SQL",
-    "MySQL",
-    "Docker",
-    "Linux",
-    "Pandas",
-    "NumPy",
-    "Machine Learning"
-]
+resume_text = """
+Built machine learning projects using Python,
+Pandas, NumPy, SQL, Docker and PyTorch.
+
+Completed machine learning courses and certifications.
+
+Created technical documentation and reports.
+"""
 
 
 results = calculate_knowledge_evidence(
-    user_skills,
+    resume_text,
     knowledge_data
 )
 
@@ -48,6 +46,6 @@ for result in results:
             f"{result['knowledge']} | "
             f"Importance: {result['importance']} | "
             f"Evidence: {result['evidence_score']} | "
-            f"Matched Skills: "
-            f"{result['matched_skills']}"
+            f"Matched Keywords: "
+            f"{result['matched_keywords']}"
         )

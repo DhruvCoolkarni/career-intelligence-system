@@ -1,58 +1,128 @@
-from .skill_normalizer import normalize_skill
-
-
 KNOWLEDGE_EVIDENCE = {
 
     "computers and electronics": {
         "python",
         "java",
         "c++",
+        "programming",
+        "software",
+        "machine learning",
+        "deep learning",
+        "computer vision",
+        "artificial intelligence",
         "database",
-        "pandas",
-        "numpy",
-        "scikit-learn",
-        "machine learning",
-        "pytorch",
-        "tensorflow",
-        "git",
+        "sql",
         "docker",
-        "operating system software",
-        "development environment"
-    },
-
-    "mathematics": {
-        "numpy",
-        "machine learning",
-        "scikit-learn"
-    },
-
-    "engineering and technology": {
-        "python",
-        "java",
-        "c++",
-        "docker",
-        "machine learning",
         "pytorch",
         "tensorflow"
     },
 
+    "mathematics": {
+        "mathematics",
+        "math",
+        "statistics",
+        "statistical",
+        "probability",
+        "linear algebra",
+        "calculus",
+        "numerical"
+    },
+
+    "engineering and technology": {
+        "engineering",
+        "machine learning",
+        "deep learning",
+        "artificial intelligence",
+        "software development",
+        "programming",
+        "algorithm",
+        "algorithms",
+        "computer vision",
+        "nlp"
+    },
+
+    "english language": {
+        "technical documentation",
+        "documentation",
+        "technical writing",
+        "report",
+        "reports",
+        "written",
+        "writing"
+    },
+
+    "design": {
+        "design",
+        "ui",
+        "ux",
+        "user interface",
+        "user experience",
+        "prototype",
+        "prototyping"
+    },
+
     "telecommunications": {
-        "network monitoring software",
-        "network security and virtual private network vpn equipmentsoftware",
-        "lan software",
-        "wireless software"
+        "network",
+        "networking",
+        "tcp",
+        "ip",
+        "wireless",
+        "telecommunication"
+    },
+
+    "education and training": {
+        "teaching",
+        "training",
+        "course",
+        "courses",
+        "certification",
+        "certifications",
+        "workshop",
+        "learning"
+    },
+
+    "administration and management": {
+        "management",
+        "managed",
+        "leadership",
+        "project management",
+        "team lead",
+        "planning"
+    },
+
+    "sales and marketing": {
+        "marketing",
+        "sales",
+        "customer",
+        "market research",
+        "campaign"
+    },
+
+    "customer and personal service": {
+        "customer",
+        "client",
+        "support",
+        "service",
+        "user support"
+    },
+
+    "public safety and security": {
+        "cybersecurity",
+        "security",
+        "information security",
+        "network security",
+        "authentication",
+        "encryption"
     }
 }
 
 
 def calculate_knowledge_evidence(
-    user_skills,
+    resume_text,
     knowledge_data
 ):
-    normalized_user_skills = {
-        normalize_skill(skill)
-        for skill in user_skills
-    }
+
+    resume_text = resume_text.lower()
 
     knowledge_scores = []
 
@@ -68,27 +138,28 @@ def calculate_knowledge_evidence(
             .strip()
         )
 
-        evidence_skills = KNOWLEDGE_EVIDENCE.get(
+        evidence_keywords = KNOWLEDGE_EVIDENCE.get(
             knowledge_name,
             set()
         )
 
-        matched_evidence = (
-            normalized_user_skills
-            & evidence_skills
-        )
+        matched_keywords = []
 
-        if matched_evidence:
+        for keyword in evidence_keywords:
+
+            if keyword in resume_text:
+                matched_keywords.append(keyword)
+
+        if matched_keywords:
 
             evidence_score = min(
-                len(matched_evidence) / 3,
+                len(matched_keywords) / 3,
                 1
             )
 
         else:
 
             evidence_score = 0
-
 
         knowledge_scores.append({
             "knowledge": row["Element Name"],
@@ -97,10 +168,9 @@ def calculate_knowledge_evidence(
                 evidence_score,
                 2
             ),
-            "matched_skills": sorted(
-                matched_evidence
+            "matched_keywords": sorted(
+                matched_keywords
             )
         })
-
 
     return knowledge_scores

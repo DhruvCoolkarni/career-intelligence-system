@@ -1,46 +1,34 @@
+from app.utils.career_profile import get_career_profile
 from app.utils.onet_loader import (
     get_essential_skills_for_job
 )
 
-import pandas as pd
 
+target_job = "Machine Learning Engineer"
 
-target_job = "Computer and Information Systems Managers"
+profile = get_career_profile(target_job)
 
-
-print("\n===== CAREER PROFILE INSPECTION =====\n")
-
-print("Target Job:")
+print("Selected Career:")
 print(target_job)
 
+print("\nCareer Profile:")
+print(profile)
 
-essential_data = get_essential_skills_for_job(
-    target_job
-)
+if profile:
 
+    onet_job = profile["onet_title"]
 
-print("\n===== ESSENTIAL SKILLS =====\n")
+    print("\nO*NET Reference Career:")
+    print(onet_job)
 
-importance_data = essential_data[
-    essential_data["Scale Name"] == "Importance"
-].copy()
+    essential_data = get_essential_skills_for_job(
+        onet_job
+    )
 
+    print("\nO*NET Core Skill Records:")
+    print(len(essential_data))
 
-importance_data = importance_data.sort_values(
-    by="Data Value",
-    ascending=False
-)
-
-
-print(
-    importance_data[
-        ["Element Name", "Data Value"]
-    ].to_string(index=False)
-)
-
-
-print("\n===== AVAILABLE O*NET COLUMNS =====\n")
-
-print(
-    list(essential_data.columns)
-)
+    if not essential_data.empty:
+        print("✅ O*NET mapping works")
+    else:
+        print("❌ O*NET occupation not found")
