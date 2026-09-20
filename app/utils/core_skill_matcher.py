@@ -1,25 +1,37 @@
 CORE_SKILL_EVIDENCE = {
 
     "reading comprehension": {
-        "read",
         "documentation",
+        "technical documentation",
+        "read technical documentation",
         "research",
-        "technical documentation"
+        "researched",
+        "understood requirements"
     },
 
     "active listening": {
         "collaborated",
+        "collaboration",
         "teamwork",
+        "worked with a team",
+        "worked with teams",
+        "cross-functional team",
+        "cross-functional teams",
         "requirements",
-        "discussion"
+        "discussion",
+        "discussions",
+        "stakeholder"
     },
 
     "writing": {
         "documentation",
+        "technical documentation",
+        "technical writing",
+        "written",
         "report",
         "reports",
-        "technical writing",
-        "written"
+        "documented",
+        "documented projects"
     },
 
     "speaking": {
@@ -27,7 +39,10 @@ CORE_SKILL_EVIDENCE = {
         "presented",
         "presentations",
         "communication",
-        "explained"
+        "communicated",
+        "explained",
+        "demonstrated",
+        "public speaking"
     },
 
     "mathematics": {
@@ -35,34 +50,51 @@ CORE_SKILL_EVIDENCE = {
         "math",
         "statistics",
         "probability",
-        "calculation"
+        "calculation",
+        "calculated",
+        "mathematical"
     },
 
     "science": {
         "science",
         "scientific",
         "experiment",
-        "experiments"
+        "experiments",
+        "research",
+        "research project"
     },
 
     "critical thinking": {
         "analysis",
         "analyzed",
+        "analyze",
         "problem solving",
         "problem-solving",
+        "solved problems",
+        "solving problems",
         "evaluation",
         "evaluated",
-        "decision making"
+        "decision making",
+        "decision-making",
+        "debugged",
+        "debugging",
+        "troubleshooting",
+        "identified issues",
+        "identified problems"
     },
 
     "active learning": {
         "learned",
         "learning",
+        "learn new",
         "course",
         "courses",
         "certification",
         "certifications",
-        "training"
+        "training",
+        "trained",
+        "self-learning",
+        "self learning"
     },
 
     "learning strategies": {
@@ -70,8 +102,12 @@ CORE_SKILL_EVIDENCE = {
         "course",
         "courses",
         "certification",
+        "certifications",
         "self-learning",
-        "self learning"
+        "self learning",
+        "learning plan",
+        "learning path",
+        "skill development"
     },
 
     "monitoring": {
@@ -80,11 +116,12 @@ CORE_SKILL_EVIDENCE = {
         "tracked",
         "tracking",
         "performance",
-        "metrics"
+        "metrics",
+        "measured",
+        "measurement",
+        "performance monitoring"
     }
 }
-
-
 def calculate_core_skill_evidence(
     resume_text,
     essential_data

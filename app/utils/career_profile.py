@@ -1,35 +1,21 @@
-CAREER_PROFILES = {
-
-    "machine learning engineer": {
-        "onet_title": "Computer and Information Research Scientists"
-    },
-
-    "data scientist": {
-        "onet_title": "Data Scientists"
-    },
-
-    "data analyst": {
-        "onet_title": "Data Scientists"
-    },
-
-    "computer vision engineer": {
-        "onet_title": "Computer and Information Research Scientists"
-    },
-
-    "nlp engineer": {
-        "onet_title": "Computer and Information Research Scientists"
-    }
-}
+from .career_catalog import resolve_career
+from .career_catalog import CAREER_CATALOG
 
 
 def get_career_profile(target_job):
 
-    job_key = (
-        str(target_job)
-        .strip()
-        .lower()
+    canonical_career = resolve_career(
+        target_job
     )
 
-    return CAREER_PROFILES.get(
-        job_key
-    )
+    if canonical_career is None:
+        return None
+
+    profile = CAREER_CATALOG[
+        canonical_career
+    ]
+
+    return {
+        "onet_title": profile["onet_title"],
+        "onet_soc": profile["onet_soc"]
+    }

@@ -7,7 +7,7 @@ from app.utils.skill_matcher import (
 )
 
 
-target_job = "Computer and Information Research Scientists"
+target_job = "Machine Learning Engineer"
 
 user_skills = [
     "Python",

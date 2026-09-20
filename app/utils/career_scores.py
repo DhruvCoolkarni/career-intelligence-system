@@ -1,4 +1,5 @@
 from .skill_normalizer import normalize_skill
+from .market_career_mapping import CAREER_MARKET_MAPPING
 
 
 # ------------------------------------------------
@@ -32,7 +33,6 @@ def calculate_technical_score(
         total_weight += weight
 
         if required_skill in normalized_user_skills:
-
             matched_weight += weight
 
     if total_weight == 0:
@@ -88,7 +88,7 @@ def calculate_core_skill_score(
 
 
 # ------------------------------------------------
-# MARKET RELEVANCE SCORE
+# ORIGINAL MARKET RELEVANCE SCORE
 # ------------------------------------------------
 
 def calculate_market_relevance_score(
@@ -107,8 +107,8 @@ def calculate_market_relevance_score(
         }
 
     relevant_data = job_data[
-        (job_data["In Demand"] == "Y")
-        | (job_data["Hot Technology"] == "Y")
+        (job_data["In Demand"] == "Y") |
+        (job_data["Hot Technology"] == "Y")
     ]
 
     if relevant_data.empty:
@@ -137,7 +137,9 @@ def calculate_market_relevance_score(
                         user_skill,
                         skill
                     ):
-                        matched_groups.add(group_name)
+                        matched_groups.add(
+                            group_name
+                        )
                         break
 
                 break
@@ -150,7 +152,8 @@ def calculate_market_relevance_score(
         }
 
     missing_groups = (
-        relevant_groups - matched_groups
+        relevant_groups -
+        matched_groups
     )
 
     score = (
@@ -167,6 +170,110 @@ def calculate_market_relevance_score(
             missing_groups
         )
     }
+
+
+# ------------------------------------------------
+# CAREER-SPECIFIC MARKET RELEVANCE SCORE
+# ------------------------------------------------
+
+def calculate_career_market_relevance_score(
+    job_data,
+    user_skills,
+    target_job
+):
+
+    if job_data.empty:
+        return {
+            "score": 0,
+            "matched_groups": [],
+            "missing_groups": []
+        }
+
+    relevant_data = job_data[
+        (job_data["In Demand"] == "Y") |
+        (job_data["Hot Technology"] == "Y")
+    ]
+
+    if relevant_data.empty:
+        return {
+            "score": 0,
+            "matched_groups": [],
+            "missing_groups": []
+        }
+
+    career_mapping = CAREER_MARKET_MAPPING.get(
+        target_job,
+        {}
+    )
+
+    # If we do not have a career-specific mapping,
+    # safely fall back to the original scorer.
+    if not career_mapping:
+        return calculate_market_relevance_score(
+            job_data,
+            user_skills
+        )
+
+    required_groups = set()
+
+    for skill in relevant_data["Element Name"].dropna():
+
+        skill_name = skill.lower().strip()
+
+        if skill_name in career_mapping:
+
+            mapped_skill = career_mapping[
+                skill_name
+            ]
+
+            required_groups.add(
+                mapped_skill
+            )
+
+    if not required_groups:
+        return {
+            "score": 0,
+            "matched_groups": [],
+            "missing_groups": []
+        }
+
+    normalized_user_skills = {
+        normalize_skill(skill)
+        for skill in user_skills
+    }
+
+    matched_groups = set()
+
+    for group in required_groups:
+
+        normalized_group = normalize_skill(
+            group
+        )
+
+        if normalized_group in normalized_user_skills:
+
+            matched_groups.add(group)
+
+    missing_groups = (
+        required_groups -
+        matched_groups
+    )
+
+    score = (
+        len(matched_groups)
+        / len(required_groups)
+    ) * 100
+
+    return {
+        "score": round(score, 2),
+        "matched_groups": sorted(
+            matched_groups
+        ),
+        "missing_groups": sorted(
+            missing_groups
+        )
+    }
+
 
 # ------------------------------------------------
 # FINAL CAREER READINESS
@@ -190,6 +297,7 @@ def calculate_career_readiness(
         score,
         2
     )
+
 
 # ------------------------------------------------
 # KNOWLEDGE SCORE

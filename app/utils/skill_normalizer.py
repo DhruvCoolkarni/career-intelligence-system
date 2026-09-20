@@ -1,4 +1,5 @@
 SKILL_MAPPING = {
+
     # Programming
     "python": "python",
     "java": "java",
@@ -38,23 +39,76 @@ SKILL_MAPPING = {
 
     # O*NET terminology
     "business intelligence and data analysis software": "business intelligence",
-    "development environment software": "development environment",
+    "development environment software": "development",
+
+    # Networking
+    "networking": "networking",
+    "network": "networking",
+
+    # Cybersecurity
+    "cybersecurity": "cybersecurity",
+    "cyber security": "cybersecurity",
+    "network security": "network security",
+    "network security and virtual private network vpn equipment software": "network security",
+    "transaction security and virus protection software": "cybersecurity",
+    "transactionsecurity and virus protection software": "cybersecurity",
+
+    # Cloud
+    "cloud": "cloud",
+    "cloud security": "cloud security",
+    "cloud-based management software": "cloud",
+
+    # System / Infrastructure
+    "system administration": "system administration",
+    "operating system": "operating system",
+    "operating system software": "operating system",
+
+    # Software Development
+    "development": "development",
+    "application server": "application server",
+    "application server software": "application server",
+
+    # Software Testing / QA
+    "software testing": "software testing",
+    "program testing software": "software testing",
+    "program testingsoftware": "software testing",
+
+    # DevOps
+    "configuration management": "configuration management",
+    "configuration management software": "configuration management",
+
+    # Data Science
+    "data mining": "data mining",
+    "data mining software": "data mining",
+    "data science": "data science",
+    "analytical or scientific software": "data science",
 }
 
 
 def normalize_skill(skill):
+
     skill = skill.lower().strip()
 
-    return SKILL_MAPPING.get(skill, skill)
+    return SKILL_MAPPING.get(
+        skill,
+        skill
+    )
 
 
 def normalize_skills(skills):
+
     normalized_skills = []
 
     for skill in skills:
-        normalized_skill = normalize_skill(skill)
+
+        normalized_skill = normalize_skill(
+            skill
+        )
 
         if normalized_skill not in normalized_skills:
-            normalized_skills.append(normalized_skill)
+
+            normalized_skills.append(
+                normalized_skill
+            )
 
     return normalized_skills

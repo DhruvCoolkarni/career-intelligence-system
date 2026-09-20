@@ -25,7 +25,7 @@ from utils.core_skill_matcher import (
 from utils.career_scores import (
     calculate_technical_score,
     calculate_core_skill_score,
-    calculate_market_relevance_score,
+    calculate_career_market_relevance_score,
     calculate_knowledge_score,
     calculate_career_readiness
 )
@@ -42,6 +42,9 @@ from utils.technical_requirements import (
 from utils.career_profile import (
     get_career_profile
 )
+
+from utils.career_search import search_careers
+from utils.career_catalog import CAREER_CATALOG
 
 # ------------------------------------------------
 # MODERN UI STYLING
@@ -213,11 +216,54 @@ input_col1, input_col2 = st.columns(
 
 with input_col1:
 
-    target_job = st.text_input(
-        "Target Career",
-        placeholder="e.g. Machine Learning Engineer"
+    st.markdown("**Target Career**")
+
+    selection_mode = st.radio(
+        "Choose how you want to find your career",
+        ["🔍 Search", "📋 Browse"],
+        horizontal=True,
+        label_visibility="collapsed"
     )
 
+    target_job = None
+
+    if selection_mode == "🔍 Search":
+
+        target_job_input = st.text_input(
+            "Search career, skill, or technology",
+            placeholder="e.g. Python, AI, software developer",
+            label_visibility="collapsed"
+        )
+
+        career_suggestions = search_careers(
+            target_job_input
+        )
+
+        if career_suggestions:
+
+            st.caption("Suggested Careers")
+
+            target_job = st.radio(
+                "Choose a career",
+                career_suggestions,
+                label_visibility="collapsed"
+            )
+
+    else:
+
+        available_careers = list(
+            CAREER_CATALOG.keys()
+        )
+
+        target_job = st.selectbox(
+            "Select a career",
+            ["Select a career"] + available_careers,
+            label_visibility="collapsed"
+        )
+
+        if target_job == "Select a career":
+            target_job = None
+    
 
 with input_col2:
 
@@ -328,11 +374,11 @@ if uploaded_resume:
         )
 
         software_data = get_software_skills_for_job(
-            onet_job
+            target_job_clean
         )
 
         essential_data = get_essential_skills_for_job(
-            onet_job
+            target_job_clean
         )
 
         # ------------------------------------------------
@@ -383,11 +429,10 @@ if uploaded_resume:
             # MARKET RELEVANCE SCORE
             # ------------------------------------------------
 
-            market_relevance_result = (
-                calculate_market_relevance_score(
-                    software_data,
-                    confirmed_skills
-                )
+            market_relevance_result = calculate_career_market_relevance_score(
+                software_data,
+                confirmed_skills,
+                target_job_clean
             )
 
             market_relevance_score = (
